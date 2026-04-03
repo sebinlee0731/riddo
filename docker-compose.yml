@@ -1,0 +1,32 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: p07-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - p07-network
+
+  redis:
+    image: redis:8.6.1
+    container_name: p07-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - p07-network
+
+networks:
+  p07-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
