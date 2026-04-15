@@ -16,7 +16,7 @@ services:
       - p07-network
 
   redis:
-    image: redis:8.6.1
+    image: redis:8.6.2-alpine
     container_name: p07-redis
     restart: always
     ports:
@@ -27,6 +27,3 @@ services:
 networks:
   p07-network:
     driver: bridge
-
-volumes:
-  postgres_data:
