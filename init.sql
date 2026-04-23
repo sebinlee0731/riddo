@@ -85,4 +85,11 @@ CREATE INDEX idx_chat_logs_user_id ON "chat_logs" ("user_id");
 CREATE INDEX idx_search_logs_session_id ON "search_logs" ("session_id");
 CREATE INDEX idx_feedback_chat_logs_id ON "feedback" ("chat_logs_id");
 
+-- FTS 자동 갱신 트리거: content/heading 변경 시 fts_vector를 korean(mecab-ko) 토큰으로 재색인
+-- public.korean 은 01_ts_mecab_ko.sql(Dockerfile이 넣어준 init script) 실행 시점에 생성됨
+CREATE TRIGGER doc_chunks_fts_update
+  BEFORE INSERT OR UPDATE ON "doc_chunks"
+  FOR EACH ROW EXECUTE FUNCTION
+  tsvector_update_trigger("fts_vector", 'public.korean', "content", "heading");
+
 

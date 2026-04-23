@@ -1,6 +1,11 @@
 services:
   db:
-    image: pgvector/pgvector:pg16
+    # 롤백: build 섹션을 지우고 아래 줄을 복원하면 기본 pgvector 이미지 사용
+    # image: pgvector/pgvector:pg16
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: p07-postgres-korean:pg16
     container_name: p07-postgres
     restart: always
     environment:
@@ -11,7 +16,11 @@ services:
       - "5432:5432"
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      # 초기화 스크립트 2개는 모두 호스트에서 마운트 (파일명 알파벳 순으로 실행됨)
+      # 01_ts_mecab_ko.sql : textsearch_ko 원본 (vendored, 수정 금지)
+      # 02_init.sql        : 우리 스키마 + 트리거
+      - ./ts_mecab_ko.sql:/docker-entrypoint-initdb.d/01_ts_mecab_ko.sql:ro
+      - ./init.sql:/docker-entrypoint-initdb.d/02_init.sql
     networks:
       - p07-network
 
