@@ -40,9 +40,10 @@ CREATE TABLE "doc_chunks" (
 
 CREATE TABLE "chat_logs" (
 	"id"	SERIAL		NOT NULL PRIMARY KEY,
-	"session_id"	UUID		NULL REFERENCES "sessions"("id") ON DELETE CASCADE,
+	"session_id"	UUID	 	NULL REFERENCES "sessions"("id") ON DELETE CASCADE,
 	"user_id"	UUID		NULL REFERENCES "users"("id") ON DELETE SET NULL,
 	"message"	TEXT		NULL,
+	"references_json" JSONB NULL,
 	"role"	VARCHAR(10)		NULL check (role in ('user', 'assistant')),
 	"created_at"	TIMESTAMPTZ	DEFAULT now()	NOT NULL
 );
