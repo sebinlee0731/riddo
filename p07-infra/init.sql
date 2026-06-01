@@ -45,6 +45,7 @@ CREATE TABLE "chat_logs" (
 	"message"	TEXT		NULL,
 	"references_json" JSONB NULL,
 	"role"	VARCHAR(10)		NULL check (role in ('user', 'assistant')),
+	"response_type"	VARCHAR(20)		NULL check (response_type in ('success', 'out_of_scope', 'no_document')),
 	"created_at"	TIMESTAMPTZ	DEFAULT now()	NOT NULL
 );
 
